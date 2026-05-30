@@ -1,5 +1,8 @@
 package com.fitness.userservice.service;
 
+import java.util.Optional;
+
+import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
 
 import com.fitness.userservice.UserRepository;
@@ -50,6 +53,9 @@ public class UserService {
 		userResponse.setUpdatedAt(user.getUpdatedAt());
 		
 		return userResponse;
+	}
+	public Boolean existByUserId(String userId) {
+		return repository.existsById(userId);
 	}
 
 }
