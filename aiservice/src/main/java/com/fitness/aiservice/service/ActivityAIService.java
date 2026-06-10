@@ -58,22 +58,35 @@ public class ActivityAIService {
 		return null;
 	}
 	
-	private String extractSafety(JsonNode path) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	private String extractSuggestions(JsonNode path) {
-		String improvements = new String();
-		if(improvementsNode.isArray()) {
-		    improvementsNode.forEach(improvement -> {
-		        String area = improvement.path("area").asText();
-		        String recommendation = improvement.path("recommendation").asText();
-		        improvements += String.format("%s: %s\n", area, recommendation);
+	private String extractSafety(JsonNode safety) {
+		String suggestion = new String();
+		if(safety.isArray()) {
+		    safety.forEach(item -> {
+		        String workout = item.path("workout").asText();
+		        String details = item.path("details").asText();
+		        suggestion += String.format("%s: %s\n", workout, details);
 		    });
 		}
+		return suggestion.isEmpty()?
+				"No specific next workouts identified. Focus on maintaining consistency and gradually increasing intensity.":
+					suggestion;
+		}
+			
+	
+	private String extractSuggestions(JsonNode suggestionsNode) {
+		String suggestion = new String();
+		if(suggestionsNode.isArray()) {
+		    suggestionsNode.forEach(item -> {
+		        String workout = item.path("workout").asText();
+		        String details = item.path("details").asText();
+		        suggestion += String.format("%s: %s\n", workout, details);
+		    });
+		}
+		return suggestion.isEmpty()?
+				"No specific next workouts identified. Focus on maintaining consistency and gradually increasing intensity.":
+					suggestion;
 		}
 		
-	}
 	private String extractImprovements(JsonNode improvementsNode) {
 		String improvements = new String();
 		if(improvementsNode.isArray()) {
@@ -83,8 +96,8 @@ public class ActivityAIService {
 		        improvements += String.format("%s: %s\n", area, recommendation);
 		    });
 		}
-		return improvements.isEmpty()?
-				Collections.singletonList("No specific improvements identified. Focus on maintaining consistency and gradually increasing intensity."):
+		return improvements.isEmpty()
+				? "No specific improvements identified. Focus on maintaining consistency and gradually increasing intensity.":
 					improvements;
 		}
 	}
