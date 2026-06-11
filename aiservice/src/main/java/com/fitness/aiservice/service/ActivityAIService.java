@@ -1,13 +1,14 @@
 package com.fitness.aiservice.service;
 
+import java.time.LocalDateTime;
+import java.util.UUID;
+
 import org.springframework.stereotype.Service;
 
-import com.fitness.aiservice.models.Activity;
-import com.fitness.aiservice.models.Recommendation;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import java.util.UUID;
+import com.fitness.aiservice.models.Activity;
+import com.fitness.aiservice.models.Recommendation;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +19,6 @@ import lombok.extern.slf4j.Slf4j;
 public class ActivityAIService {
 
     private final GeminiService geminiService;
-
     public Recommendation generateRecommendation(Activity activity) {
         String prompt = createPromptForActivity(activity);
         String aiResponse = geminiService.getRecommendation(prompt);
@@ -62,6 +62,7 @@ public class ActivityAIService {
                     .improvements(improvements)
                     .suggestions(suggestions)
                     .safety(safety)
+                    .createdAt(LocalDateTime.now())
                     .build();
 
         } catch (Exception e) {
@@ -83,10 +84,10 @@ public class ActivityAIService {
             });
         }
 
-        return improvements.isEmpty()
+        return improvements.length() == 0
                 ? "No specific improvements identified. Focus on maintaining consistency and gradually increasing intensity."
                 : improvements.toString().trim();
-    }
+        }
 
     // ── Suggestions ───────────────────────────────────────────────────────────
  
@@ -101,7 +102,7 @@ public class ActivityAIService {
             });
         }
 
-        return suggestions.isEmpty()
+        return suggestions.length() == 0
                 ? "No specific next workouts identified. Focus on maintaining consistency and gradually increasing intensity."
                 : suggestions.toString().trim();
     }
@@ -115,7 +116,7 @@ public class ActivityAIService {
             safetyNode.forEach(item -> safety.append(item.asText()).append("\n"));
         }
 
-        return safety.isEmpty()
+        return safety.length() == 0
                 ? "No specific safety guidelines provided. Always warm up and cool down properly."
                 : safety.toString().trim();
     }
