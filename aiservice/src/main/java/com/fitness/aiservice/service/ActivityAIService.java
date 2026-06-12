@@ -1,6 +1,8 @@
 package com.fitness.aiservice.service;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
@@ -66,12 +68,29 @@ public class ActivityAIService {
                     .build();
 
         } catch (Exception e) {
-            log.error("Error processing AI response: {}", e.getMessage());
+           e.printStackTrace();
+           return createDefaultRecommendation(activity);
         }
-        return null;
+        
     }
 
-    // ── Improvements ──────────────────────────────────────────────────────────
+    private Recommendation createDefaultRecommendation(Activity activity) {
+    	return Recommendation.builder()
+                .Id(UUID.randomUUID().toString())
+                .activityId(activity.getId())
+                .userId(activity.getUserId())
+                .recommendation("Unable to generate detailed recommendation at this time. Please try again later.")
+                .improvements("Continue with current routine and focus on consistency.")
+                .suggestions("Consider consulting a fitness professional for personalized workout plan.")
+                .safety("Always warm up before exercising and cool down afterward.\n" +
+						"Stay hydrated and listen to your body to avoid overexertion.")
+                .createdAt(LocalDateTime.now())
+                .build(); 
+		
+	}
+    
+
+	// ── Improvements ──────────────────────────────────────────────────────────
     // Gemini shape: [{ "area": "...", "recommendation": "..." }, ...]
     private String extractImprovements(JsonNode improvementsNode) {
         StringBuilder improvements = new StringBuilder();
