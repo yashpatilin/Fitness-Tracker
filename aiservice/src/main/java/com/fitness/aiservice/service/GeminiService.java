@@ -27,7 +27,7 @@ public class GeminiService {
 					Map.of("text", details)
 			})
 		});
-		
+		System.out.println("Calling Gemini...");
 		String response = webClient.post()
 				.uri(geminiApiUrl)
 				.header("Content-Type", "application/json")

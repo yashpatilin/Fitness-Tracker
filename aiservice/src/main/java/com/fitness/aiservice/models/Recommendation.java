@@ -1,7 +1,7 @@
 package com.fitness.aiservice.models;
 
 import java.time.LocalDateTime;
-
+import jakarta.persistence.Column;
 import org.hibernate.annotations.CreationTimestamp;
 
 import jakarta.persistence.Entity;
@@ -22,13 +22,22 @@ public class Recommendation {
 	
 	@Id
 	private String Id;
+
 	private String activityId;
 	private String userId;
+
+	@Column(columnDefinition = "TEXT")
 	private String recommendation;
+
+	@Column(columnDefinition = "TEXT")
 	private String improvements;
+
+	@Column(columnDefinition = "TEXT")
 	private String suggestions;
+
+	@Column(columnDefinition = "TEXT")
 	private String safety;
-	
+
 	@CreationTimestamp
 	private LocalDateTime createdAt;
 }
