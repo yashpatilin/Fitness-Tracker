@@ -1,0 +1,2 @@
+# Ignore secrets
+aiservice/src/main/resources/application.properties
