@@ -14,9 +14,8 @@ public class RecommendationService {
 	private final RecommendationRepository recommendationRepository;
 	public String getUserRecommendations(String userId) {
 		
-
         Recommendation recommendation =
-                recommendationRepository.findByUserId(userId)
+                recommendationRepository.findFirstByUserIdOrderByCreatedAtDesc(userId)
                 .orElseThrow(() ->
                         new RuntimeException("No recommendations found for userId: " + userId));
 
