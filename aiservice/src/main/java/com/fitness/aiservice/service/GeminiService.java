@@ -35,10 +35,7 @@ public class GeminiService {
 
 	    try {
 
-	        System.out.println("Gemini URL = " + geminiApiUrl);
-	        System.out.println("Gemini Key Present = " + (geminiApiKey != null));
-
-	        String response = webClient.post()
+	        return webClient.post()
 	                .uri(geminiApiUrl)
 	                .header("Content-Type", "application/json")
 	                .header("x-goog-api-key", geminiApiKey)
@@ -47,15 +44,7 @@ public class GeminiService {
 	                .bodyToMono(String.class)
 	                .block();
 
-	        System.out.println("Gemini Response:");
-	        System.out.println(response);
-
-	        return response;
-
 	    } catch (Exception e) {
-
-	        System.out.println("========== GEMINI ERROR ==========");
-	        e.printStackTrace();
 
 	        return "Unable to generate detailed recommendation at this time. Please try again later.";
 	    }
