@@ -1,8 +1,5 @@
 package com.fitness.userservice.service;
 
-import java.util.Optional;
-
-import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
 
 import com.fitness.userservice.UserRepository;
@@ -20,7 +17,18 @@ public class UserService {
 	public UserResponse register(RegisterRequest request) {
 		
 		if(repository.existsByEmail(request.getEmail())) {
-			throw new RuntimeException("User with email " + request.getEmail() + " already exists.");
+			User existingUser = repository.findByEmail(request.getEmail());
+		
+			UserResponse userResponse = new UserResponse();
+			userResponse.setId(existingUser.getId());
+			userResponse.setEmail(existingUser.getEmail());
+			userResponse.setFName(existingUser.getFName());
+			userResponse.setLName(existingUser.getLName());
+			userResponse.setPassword(existingUser.getPassword());
+			userResponse.setCreatedAt(existingUser.getCreatedAt());
+			userResponse.setUpdatedAt(existingUser.getUpdatedAt());
+			
+			return userResponse;
 		}
 		
 		User user = new User();
@@ -55,7 +63,7 @@ public class UserService {
 		return userResponse;
 	}
 	public Boolean existByUserId(String userId) {
-		return repository.existsById(userId);
+		return repository.existsByKeycloakId(userId);
 	}
 
 }

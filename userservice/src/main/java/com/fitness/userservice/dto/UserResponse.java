@@ -2,13 +2,13 @@ package com.fitness.userservice.dto;
 
 import java.time.LocalDateTime;
 
-
 import lombok.Data;
 
 @Data
 public class UserResponse {
 	
 	private String id;
+	private String keycloakId;
 	private String email;
 	private String FName;
 	private String LName;

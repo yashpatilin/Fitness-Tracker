@@ -8,4 +8,8 @@ import com.fitness.userservice.models.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, String> {
 	boolean existsByEmail(String email);
+
+	Boolean existsByKeycloakId(String userId);
+
+	User findByEmail(String email);
 }
