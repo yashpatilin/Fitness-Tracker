@@ -4,10 +4,10 @@ import org.springframework.stereotype.Service;
 
 import com.fitness.userservice.UserRepository;
 import com.fitness.userservice.dto.RegisterRequest;
-import com.fitness.userservice.dto.UserResponse;
 import com.fitness.userservice.models.User;
 
 import lombok.AllArgsConstructor;
+import user.UserResponse;
 
 @Service
 @AllArgsConstructor
@@ -35,6 +35,7 @@ public class UserService {
 		user.setEmail(request.getEmail());
 		user.setFName(request.getFName());
 		user.setLName(request.getLName());
+		user.setKeycloakId(request.getKeycloakId());
 		user.setPassword(request.getPassword());
 		
 		User savedUser = repository.save(user);
@@ -43,6 +44,7 @@ public class UserService {
 		userResponse.setEmail(savedUser.getEmail());
 		userResponse.setFName(savedUser.getFName());
 		userResponse.setLName(savedUser.getLName());
+		userResponse.setKeycloakId(savedUser.getKeycloakId());
 		userResponse.setPassword(savedUser.getPassword());
 		userResponse.setCreatedAt(savedUser.getCreatedAt());
 		userResponse.setUpdatedAt(savedUser.getUpdatedAt());

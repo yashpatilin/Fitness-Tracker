@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fitness.userservice.dto.RegisterRequest;
-import com.fitness.userservice.dto.UserResponse;
 import com.fitness.userservice.service.UserService;
 
 import lombok.AllArgsConstructor;
+import user.UserResponse;
 
 @RestController
 @AllArgsConstructor
