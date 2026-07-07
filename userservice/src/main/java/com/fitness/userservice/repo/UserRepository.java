@@ -1,4 +1,4 @@
-package com.fitness.userservice;
+package com.fitness.userservice.repo;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

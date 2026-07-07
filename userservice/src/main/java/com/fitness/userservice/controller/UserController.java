@@ -9,34 +9,32 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fitness.userservice.dto.RegisterRequest;
+import com.fitness.userservice.dto.UserResponse;
 import com.fitness.userservice.service.UserService;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import user.UserResponse;
 
 @RestController
-@AllArgsConstructor
 @RequestMapping("/api/users")
-
+@AllArgsConstructor
 public class UserController {
-	private final UserService userService;
-	
-	
-	@GetMapping("/{id}")
-	public ResponseEntity<UserResponse> getUserProfile(@PathVariable String id) {
-		// Implementation to get user by ID
-		return ResponseEntity.ok(userService.getUserProfile(id));
-	}
-	
-	@PostMapping("/register")
-	public ResponseEntity<UserResponse> register(@RequestBody RegisterRequest request) {
-		UserResponse response = userService.register(request);
-		return ResponseEntity.ok(response);
-	}
-	
-	@GetMapping("/{id}/validate")
-	public ResponseEntity<Boolean> validateUser(@PathVariable String id) {
-		// Implementation to get user by ID
-		return ResponseEntity.ok(userService.existByUserId(id));
-	}
+
+    private UserService userService;
+
+    @GetMapping("/{userId}")
+    public ResponseEntity<UserResponse> getUserProfile(@PathVariable String userId){
+        return ResponseEntity.ok(userService.getUserProfile(userId));
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<UserResponse> register(@Valid @RequestBody RegisterRequest request){
+        return ResponseEntity.ok(userService.register(request));
+    }
+
+
+    @GetMapping("/{userId}/validate")
+    public ResponseEntity<Boolean> validateUser(@PathVariable String userId){
+        return ResponseEntity.ok(userService.existByUserId(userId));
+    }
 }

@@ -1,6 +1,6 @@
 package com.example.gateway;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.log;
+
 
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.stereotype.Component;
