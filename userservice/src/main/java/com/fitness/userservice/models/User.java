@@ -30,8 +30,8 @@ public class User {
 	private String email;
 	
 	@Column(nullable = false)
-	private String FName;
-	private String LName;
+	private String firstName;
+	private String lastName;
 	private String password;
 	
 	@Enumerated(EnumType.STRING)
