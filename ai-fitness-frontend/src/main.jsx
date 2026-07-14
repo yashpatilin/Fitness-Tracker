@@ -5,11 +5,14 @@ import { Provider } from 'react-redux'
 import {store} from './store/store'
 
 import App from './App'
+import { authConfig } from './authConfig'
 
 // As of React 18
 const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(
+  <AuthProvider authConfig={authConfig}>
   <Provider store={store}>
     <App />
-  </Provider>,
+  </Provider>
+  </AuthProvider>,
 )
