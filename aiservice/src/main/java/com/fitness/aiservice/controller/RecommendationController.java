@@ -18,13 +18,13 @@ public class RecommendationController {
 	private final RecommendationService recommendationService;
 	
 	@GetMapping("/user/{userId}")
-	public ResponseEntity<String> getUserRecommendations(@PathVariable String userId) {
+	public ResponseEntity<Recommendation> getUserRecommendations(@PathVariable String userId) {
 		return ResponseEntity.ok(recommendationService.getUserRecommendations(userId));
 	
 	}
 	
 	@GetMapping("/activity/{activityId}")
-	public ResponseEntity<String> getActivityRecommendations(@PathVariable String activityId) {
+	public ResponseEntity<Recommendation> getActivityRecommendations(@PathVariable String activityId) {
 		return ResponseEntity.ok(recommendationService.getActivityRecommendations(activityId));
 	
 	}

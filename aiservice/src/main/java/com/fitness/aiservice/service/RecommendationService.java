@@ -12,25 +12,31 @@ import lombok.RequiredArgsConstructor;
 public class RecommendationService {
 
 	private final RecommendationRepository recommendationRepository;
-	public String getUserRecommendations(String userId) {
+	public Recommendation getUserRecommendations(String userId) {
 		
-        Recommendation recommendation =
-                recommendationRepository.findFirstByUserIdOrderByCreatedAtDesc(userId)
+        return recommendationRepository.findFirstByUserIdOrderByCreatedAtDesc(userId)
                 .orElseThrow(() ->
                         new RuntimeException("No recommendations found for userId: " + userId));
-
-        return recommendation.getRecommendation();
 	}
-	public String getActivityRecommendations(String activityId) {
+	public Recommendation getActivityRecommendations(String activityId) {
+		// The AI generation via Kafka is asynchronous and might take up to 15 seconds.
+		// Since the frontend does not poll, we will wait here for the recommendation to appear.
+		for (int i = 0; i < 20; i++) {
+			java.util.Optional<Recommendation> rec = recommendationRepository.findByActivityId(activityId);
+			if (rec.isPresent()) {
+				return rec.get();
+			}
+			try {
+				Thread.sleep(1000); // Wait 1 second before checking again
+			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
+				break;
+			}
+		}
 		
-		 Recommendation recommendation =
-		            recommendationRepository.findByActivityId(activityId)
+		return recommendationRepository.findByActivityId(activityId)
 		            .orElseThrow(() ->
 		                    new RuntimeException("No recommendations found for activityId: " + activityId));
-
-		    return recommendation.getRecommendation();
 	}
-	
-	
 
 }

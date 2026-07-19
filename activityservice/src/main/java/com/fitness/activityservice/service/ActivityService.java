@@ -9,6 +9,10 @@ import com.fitness.activityservice.dto.ActivityResponse;
 import com.fitness.activityservice.models.Activity;
 
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Value;
 
 @Service
@@ -16,19 +20,12 @@ import org.springframework.beans.factory.annotation.Value;
 public class ActivityService {
 	
 	private final ActivityRepository activityRepository;
-	private final UserValidationService userValidationService;
 	private final KafkaTemplate<String, Activity> kafkaTemplate;
 
 	@Value("${kafka.topic.name}")
 	private String topicName;
 	
 	public ActivityResponse trackActivity(ActivityRequest request) {
-		
-		boolean isValidUser = userValidationService.validateUser(request.getUserId());
-		
-		if (!isValidUser) {
-			throw new RuntimeException("Invalid user ID: " + request.getUserId());
-		}
 		
 		Activity activity = Activity.builder()
 			.userId(request.getUserId())			
@@ -62,6 +59,17 @@ public class ActivityService {
 		response.setCreatedAt(savedActivity.getCreatedAt());
 		response.setUpdatedAt(savedActivity.getUpdatedAt());
 		return response;
+	}
+
+	public List<ActivityResponse> getUserActivities(String userId) {
+		List<Activity> activities = activityRepository.findByUserId(userId);
+		return activities.stream().map(this::mapToResponse).collect(Collectors.toList());
+	}
+
+	public ActivityResponse getActivityById(String id) {
+		Activity activity = activityRepository.findById(id)
+				.orElseThrow(() -> new RuntimeException("Activity not found with id: " + id));
+		return mapToResponse(activity);
 	}
 
 }

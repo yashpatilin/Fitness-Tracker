@@ -1,31 +1,33 @@
-import React, { useEffect } from 'react'
-import { Box } from '@mui/material'
-import { useParams } from 'react-router';
+import React, { useEffect, useState } from 'react'
+import { useParams } from 'react-router'
+import { getActivityDetail } from '../services/api';
+import { Box, Card, CardContent, Divider, Typography } from '@mui/material';
+
 const ActivityDetail = () => {
-const { id } = useParams();
-const [activity, setActivity] = useState(null);
-const [recommendation, setRecommendation] = useState(null);
+  const { id } = useParams();
+  const [activity, setActivity] = useState(null);
+  const [recommendation, setRecommendation] = useState(null);
 
-useEffect(() => {
-  const fetchActivityDetail = async () => {
-    try{
-      const response = await getActivityDetail(id);
-      setActivity(response.data);
-      setRecommendation(response.data.recommendation);
+  useEffect(() => {
+    const fetchActivityDetail = async () => {
+      try {
+        const response = await getActivityDetail(id);
+        setActivity(response.data);
+        setRecommendation(response.data.recommendation);
+      } catch (error) {
+        console.error(error);
+      }
     }
-    catch(error){
-      console.error(error);
-    }
+
+    fetchActivityDetail();
+  }, [id]);
+
+  if (!activity) {
+    return <Typography>Loading...</Typography>
   }
-  fetchActivityDetail();
-}, [id]);
-
-if(!activity){
-  return <Typography>Loading</Typography>
-}
   return (
-    <Box sx={{ p: 2, border: '1px dashed grey', maxwidth: 800 }}>
-      <Card sx={{ mb: 2 }}>
+    <Box sx={{ maxWidth: 800, mx: 'auto', p: 2 }}>
+            <Card sx={{ mb: 2 }}>
                 <CardContent>
                     <Typography variant="h5" gutterBottom>Activity Details</Typography>
                     <Typography>Type: {activity.type}</Typography>
@@ -34,7 +36,8 @@ if(!activity){
                     <Typography>Date: {new Date(activity.createdAt).toLocaleString()}</Typography>
                 </CardContent>
             </Card>
-             {recommendation && (
+
+            {recommendation && (
                 <Card>
                     <CardContent>
                         <Typography variant="h5" gutterBottom>AI Recommendation</Typography>
@@ -64,7 +67,7 @@ if(!activity){
                     </CardContent>
                 </Card>
             )}
-    </Box>
+        </Box>
   )
 }
 

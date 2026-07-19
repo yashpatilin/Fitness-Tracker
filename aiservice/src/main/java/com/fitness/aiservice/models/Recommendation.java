@@ -1,7 +1,10 @@
 package com.fitness.aiservice.models;
 
 import java.time.LocalDateTime;
+import java.util.List;
+
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import org.hibernate.annotations.CreationTimestamp;
 
 import jakarta.persistence.Entity;
@@ -26,17 +29,23 @@ public class Recommendation {
 	private String activityId;
 	private String userId;
 
+	@jakarta.persistence.Enumerated(jakarta.persistence.EnumType.STRING)
+	private ActivityType type;
+	private Double duration;
+	private Integer caloriesBurned;
+	private LocalDateTime startTime;
+
 	@Column(columnDefinition = "TEXT")
 	private String recommendation;
 
-	@Column(columnDefinition = "TEXT")
-	private String improvements;
+	@jakarta.persistence.ElementCollection
+	private List<String> improvements;
 
-	@Column(columnDefinition = "TEXT")
-	private String suggestions;
+	@jakarta.persistence.ElementCollection
+	private List<String> suggestions;
 
-	@Column(columnDefinition = "TEXT")
-	private String safety;
+	@jakarta.persistence.ElementCollection
+	private List<String> safety;
 
 	@CreationTimestamp
 	private LocalDateTime createdAt;

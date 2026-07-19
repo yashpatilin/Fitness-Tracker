@@ -29,7 +29,7 @@ public class KeycloakUserSyncFilter implements WebFilter{
         String userId = exchange.getRequest().getHeaders().getFirst("X-User-ID");
         RegisterRequest registerRequest = getUserDetails(token);
 
-        if (userId == null) {
+        if (registerRequest != null && registerRequest.getKeycloakId() != null) {
             userId = registerRequest.getKeycloakId();
         }
 
@@ -55,7 +55,7 @@ public class KeycloakUserSyncFilter implements WebFilter{
                     	return chain.filter(
                     		    exchange.mutate()
                     		            .request(builder ->
-                    		                builder.header("X-User-ID", finalUserId)
+                    		                builder.headers(headers -> headers.set("X-User-ID", finalUserId))
                     		            )
                     		            .build());
                     }));

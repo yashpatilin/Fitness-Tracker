@@ -11,7 +11,11 @@ const [activity, setActivity] = useState({
   const handleSubmit = async (e) => {
     e.preventDefault();
     try{
-      await addActivities(activity);
+      await addActivities({
+        ...activity,
+        duration: parseFloat(activity.duration) || 0,
+        caloriesBurned: parseInt(activity.caloriesBurned) || 0,
+      });
       if (onActivityAdded) {
         onActivityAdded();
       }
@@ -19,7 +23,8 @@ const [activity, setActivity] = useState({
   additionalData:''});
 }
     catch(error){
-      console.error(error)
+      console.error(error);
+      alert("Error adding activity: " + (error.response?.data?.message || error.message || JSON.stringify(error)));
     }
   }
 
