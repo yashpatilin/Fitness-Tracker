@@ -1,21 +1,22 @@
 import React, { useState } from 'react'
 import {Box, FormControl, InputLabel, MenuItem, Select, TextField, Button } from '@mui/material'
+import { addActivities } from '../services/api'
 
 const ActivityForm = ({ onActivityAdded }) => {
 
 const [activity, setActivity] = useState({
   type: "RUNNING", duration: '', caloriesBurned:'',
-  additionalMetrics:{}
+  additionalData:''
 })
   const handleSubmit = async (e) => {
     e.preventDefault();
     try{
-      await addActivity(activity);
+      await addActivities(activity);
       if (onActivityAdded) {
         onActivityAdded();
       }
       setActivity({type: "RUNNING", duration: '', caloriesBurned:'',
-  additionalMetrics:{}});
+  additionalData:''});
 }
     catch(error){
       console.error(error)
@@ -49,6 +50,12 @@ const [activity, setActivity] = useState({
                 sx={{ mb: 2}}
                 value={activity.caloriesBurned}
                 onChange={(e) => setActivity({...activity, caloriesBurned: e.target.value})}/>
+
+<TextField fullWidth
+                label="Additional Data"
+                sx={{ mb: 2}}
+                value={activity.additionalData}
+                onChange={(e) => setActivity({...activity, additionalData: e.target.value})}/>
 
 <Button type='submit' variant='contained'>
     Add Activity
